@@ -167,3 +167,31 @@ form h2 {
   letter-spacing: -0.5px;
   margin-bottom: 1.6rem;
 }
+
+@media only screen and (max-width: 850px) {
+  body {
+    height: auto;
+  }
+  
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 0;
+  }
+  
+  .form-split-bill {
+    grid-template-columns: 1fr;
+  }
+  form .button {
+    grid-column: 1;
+  }
+  
+  form h2 {
+    grid-column: 1;
+  }
+  .form-add-friend {
+    grid-template-columns: 1fr;
+  }
+  
+  
+}

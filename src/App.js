@@ -1,12 +1,16 @@
-import { useState } from "react";
-import { FriendsList } from "./FriendsList";
-import { FormAddFriend } from "./FormAddFriend";
-import { FormSplitBill } from "./FormSplitBill";
-import { Button } from "./Button";
-import { initialFriends } from "./initialFriendsData";
+import { useEffect, useState } from "react";
+import { FriendsList } from "./components/FriendsList";
+import { FormAddFriend } from "./components/FormAddFriend";
+import { FormSplitBill } from "./components/FormSplitBill";
+import { Button } from "./components/Button";
+import { initialFriends } from "./data/initialFriendsData";
 
 export default function App() {
-  const [friends, setFriends] = useState(initialFriends);
+  const [friends, setFriends] = useState(() => {
+    const friendsData = JSON.parse(localStorage.getItem("friends"));
+    if (friendsData) return friendsData;
+    return initialFriends;
+  });
   const [showAddFriend, setShowAddFriend] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
 
@@ -25,6 +29,13 @@ export default function App() {
     setShowAddFriend(false);
   }
 
+  function handleDeleteFriend(id) {
+    setFriends((friends) => {
+      return friends.filter((friend) => friend.id !== id);
+    });
+    setSelectedFriend(null);
+  }
+
   function handleSplitBill(value) {
     setFriends((friends) =>
       friends.map((friend) =>
@@ -36,6 +47,10 @@ export default function App() {
 
     setSelectedFriend(null);
   }
+
+  useEffect(() => {
+    localStorage.setItem("friends", JSON.stringify(friends));
+  }, [friends]);
 
   return (
     <div className="app">
@@ -57,6 +72,7 @@ export default function App() {
         <FormSplitBill
           selectedFriend={selectedFriend}
           onSplitBill={handleSplitBill}
+          onDeleteFriend={handleDeleteFriend}
           key={selectedFriend.id}
         />
       )}
